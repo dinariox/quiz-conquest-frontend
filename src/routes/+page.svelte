@@ -1,2 +1,8 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	// eventuell vorhandener Code
+</script>
+
+<h1>Willkommen zu Quiz Conquest</h1>
+<p>
+	<a href="/join">Klicke hier, um dem Spiel beizutreten</a>
+</p>
