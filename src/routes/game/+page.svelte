@@ -49,10 +49,17 @@
 <svelte:head>
 	<title>Quiz Conquest - Teilnehmer</title>
 </svelte:head>
-<h1>Quiz Conquest</h1>
+<main class="center">
+	<h1>Quiz Conquest</h1>
 
-<QuestionBoard categories={gameState.categories} />
-<ParticipantList players={gameState.players} />
+	<QuestionBoard categories={gameState.categories} />
+	<ParticipantList players={gameState.players} />
+</main>
 
 <style>
+	.center {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 </style>

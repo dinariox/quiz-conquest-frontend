@@ -30,5 +30,5 @@
 </svelte:head>
 <h1>Quiz Conquest (Moderator)</h1>
 
-<QuestionBoard categories={gameState.categories} />
+<QuestionBoard categories={gameState.categories} isModerator={true} />
 <ParticipantList players={gameState.players} isModerator={true} />
