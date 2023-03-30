@@ -3,6 +3,7 @@
 	import type { Category, Question } from '../lib/types';
 	export let categories: Category[] = [];
 	export let isModerator: boolean = false;
+	export let showCategories: boolean = false;
 
 	function openQuestion(categoryName: string, question: Question) {
 		if (isModerator) {
@@ -14,7 +15,7 @@
 <div class="question-board">
 	{#each categories as category}
 		<div class="category">
-			<div class="category-title">{category.name}</div>
+			<div class="category-title">{showCategories ? category.name : '???'}</div>
 			{#each category.questions as question}
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
@@ -39,83 +40,111 @@
 		flex-direction: column;
 		align-items: center;
 		gap: 0.75rem;
+
+		--lighter-color: hsl(325, 44%, 54%);
+		--darker-color: hsl(325, 38%, 49%);
+		--darker-color-transparency: hsla(325, 38%, 49%, 0.467);
+	}
+
+	.category:nth-of-type(2) {
+		--lighter-color: hsl(310, 44%, 54%);
+		--darker-color: hsl(310, 38%, 49%);
+		--darker-color-transparency: hsla(310, 38%, 49%, 0.467);
+	}
+	.category:nth-of-type(3) {
+		--lighter-color: hsl(295, 44%, 54%);
+		--darker-color: hsl(295, 38%, 49%);
+		--darker-color-transparency: hsla(295, 38%, 49%, 0.467);
+	}
+	.category:nth-of-type(4) {
+		--lighter-color: hsl(280, 44%, 54%);
+		--darker-color: hsl(280, 38%, 49%);
+		--darker-color-transparency: hsla(280, 38%, 49%, 0.467);
+	}
+	.category:nth-of-type(5) {
+		--lighter-color: hsl(265, 44%, 54%);
+		--darker-color: hsl(265, 38%, 49%);
+		--darker-color-transparency: hsla(265, 38%, 49%, 0.467);
 	}
 
 	.category-title {
 		width: 10rem;
-		height: 4.5rem;
+		height: 4.25rem;
 		color: white;
 		font-weight: bold;
 		font-size: 1.5rem;
 		text-align: center;
-		padding: 1rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		line-height: 1.75rem;
 		border-radius: 0.5rem;
 
-		border: 5px solid #be5683;
-		background-color: transparent;
+		border: 5px solid var(--lighter-color);
+		background-color: #0c0c0d;
 	}
 
 	.question {
 		width: 10rem;
+		height: 4.25rem;
 		color: white;
 		text-align: center;
+		line-height: 1.75rem;
 		font-size: 2.5rem;
-		padding: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		border-radius: 0.5rem;
 		border: 5px solid transparent;
 
-		background-color: #be5683;
+		background-color: var(--lighter-color);
 		background-image: linear-gradient(
 				30deg,
-				#ab4d75 12%,
+				var(--darker-color) 12%,
 				transparent 12.5%,
 				transparent 87%,
-				#ab4d75 87.5%,
-				#ab4d75
+				var(--darker-color) 87.5%,
+				var(--darker-color)
 			),
 			linear-gradient(
 				150deg,
-				#ab4d75 12%,
+				var(--darker-color) 12%,
 				transparent 12.5%,
 				transparent 87%,
-				#ab4d75 87.5%,
-				#ab4d75
+				var(--darker-color) 87.5%,
+				var(--darker-color)
 			),
 			linear-gradient(
 				30deg,
-				#ab4d75 12%,
+				var(--darker-color) 12%,
 				transparent 12.5%,
 				transparent 87%,
-				#ab4d75 87.5%,
-				#ab4d75
+				var(--darker-color) 87.5%,
+				var(--darker-color)
 			),
 			linear-gradient(
 				150deg,
-				#ab4d75 12%,
+				var(--darker-color) 12%,
 				transparent 12.5%,
 				transparent 87%,
-				#ab4d75 87.5%,
-				#ab4d75
+				var(--darker-color) 87.5%,
+				var(--darker-color)
 			),
 			linear-gradient(
 				60deg,
-				#ab4d7577 25%,
+				var(--darker-color-transparency) 25%,
 				transparent 25.5%,
 				transparent 75%,
-				#ab4d7577 75%,
-				#ab4d7577
+				var(--darker-color-transparency) 75%,
+				var(--darker-color-transparency)
 			),
 			linear-gradient(
 				60deg,
-				#ab4d7577 25%,
+				var(--darker-color-transparency) 25%,
 				transparent 25.5%,
 				transparent 75%,
-				#ab4d7577 75%,
-				#ab4d7577
+				var(--darker-color-transparency) 75%,
+				var(--darker-color-transparency)
 			);
 		background-size: 20px 35px;
 		background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px;
