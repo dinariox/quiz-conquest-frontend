@@ -5,7 +5,7 @@ class SocketSingleton {
 	public socket: Socket;
 
 	private constructor() {
-		this.socket = io('http://217.160.37.145:3000/');
+		this.socket = io('https://quiz-conquest-backend.vercel.app/');
 	}
 
 	public static getInstance(): SocketSingleton {
