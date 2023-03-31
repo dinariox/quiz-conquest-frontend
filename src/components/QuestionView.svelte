@@ -35,7 +35,7 @@
 			{#if isDoublePoints(gameState.categories)}
 				(<span class="double-points">{gameState.activeQuestion?.value * 2}</span>)
 			{:else}
-				(<span>({gameState.activeQuestion?.value})</span>)
+				(<span>{gameState.activeQuestion?.value}</span>)
 			{/if}
 		</p>
 	{/if}
