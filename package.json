@@ -24,6 +24,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/canvas-confetti": "^1.6.0",
+		"canvas-confetti": "^1.6.0",
 		"socket.io-client": "^4.6.1"
 	}
 }

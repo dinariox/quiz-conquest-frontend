@@ -10,6 +10,7 @@
 	import ParticipantList from '../../components/ParticipantList.svelte';
 	import Buzzer from '../../components/Buzzer.svelte';
 	import QuestionView from '../../components/QuestionView.svelte';
+	import Fireworks from '../../components/Fireworks.svelte';
 
 	let gameState: GameState = {
 		players: [],
@@ -20,7 +21,9 @@
 		exposeQuestion: false,
 		exposeAnswer: false,
 		showBoard: false,
-		enumRevealAmount: 0
+		enumRevealAmount: 0,
+		lockTextInput: false,
+		revealTextInput: false
 	};
 
 	onMount(() => {
@@ -30,8 +33,8 @@
 		const correctAnswerAudio = new Audio('/success2.mp3');
 
 		buzzerAudio.volume = 0.25;
-		wrongAnswerAudio.volume = 0.35;
-		correctAnswerAudio.volume = 0.5;
+		wrongAnswerAudio.volume = 0.05;
+		correctAnswerAudio.volume = 0.4;
 
 		if (!uniqueId) {
 			// Weiterleiten zur Join-Seite, wenn keine uniqueId im Local Storage vorhanden ist
@@ -39,7 +42,7 @@
 		}
 
 		socketInstance.socket.on('uniqueIdUnknown', () => {
-			console.log(
+			logger.log(
 				'You tried to rejoin with uniqueId ' + uniqueId + " but the server doesn't recognize it."
 			);
 			goto('/join');
@@ -47,7 +50,6 @@
 
 		socketInstance.socket.on('updateGameState', (updatedGameState: GameState) => {
 			gameState = updatedGameState;
-			logger.log('Updated game state: ', gameState);
 		});
 
 		socketInstance.socket.on('removedFromGame', () => {
@@ -77,7 +79,6 @@
 
 	function handleBuzzer() {
 		socketInstance.socket.emit('buzz');
-		logger.log('Buzzed!');
 	}
 </script>
 
@@ -96,6 +97,7 @@
 		<Buzzer on:buzzer={() => handleBuzzer()} disabled={gameState.buzzedPlayer !== null} />
 	{/if}
 	<ParticipantList {gameState} />
+	<Fireworks />
 </main>
 
 <style>

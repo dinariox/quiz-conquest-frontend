@@ -2,9 +2,14 @@
 	import type { Category, GameState, Question } from '../lib/types';
 	import { QuestionType } from '../lib/types';
 	import { environment } from '../lib/environment';
+	import { socketInstance } from '$lib/socket';
+	import { isDoublePoints } from '$lib/util';
+	import { space } from 'svelte/internal';
 
 	export let gameState: GameState;
 	export let isModerator: boolean = false;
+
+	let textInput: string = '';
 
 	function extractEnumItems(question: Question): string[] {
 		const enumItems = question.question.split('|');
@@ -17,12 +22,21 @@
 			return category.questions.find((q) => q.question === question.question);
 		});
 	}
+
+	function sendTextInput() {
+		socketInstance.socket.emit('updateTextInput', textInput);
+	}
 </script>
 
 <div class="question-view">
 	{#if gameState.activeQuestion}
 		<p id="category">
-			{getQuestionCategory(gameState.activeQuestion)?.name} ({gameState.activeQuestion?.value})
+			{getQuestionCategory(gameState.activeQuestion)?.name}
+			{#if isDoublePoints(gameState.categories)}
+				(<span class="double-points">{gameState.activeQuestion?.value * 2}</span>)
+			{:else}
+				(<span>({gameState.activeQuestion?.value})</span>)
+			{/if}
 		</p>
 	{/if}
 
@@ -36,7 +50,14 @@
 	{/if}
 
 	{#if gameState.activeQuestion?.type === QuestionType.Estimate && gameState.exposeQuestion}
-		<input type="text" placeholder="Schätzung" />
+		<input
+			type="text"
+			placeholder="Schätzung"
+			maxlength="32"
+			bind:value={textInput}
+			on:input={() => sendTextInput()}
+			disabled={isModerator || gameState.lockTextInput}
+		/>
 	{/if}
 
 	{#if gameState.activeQuestion?.type === QuestionType.Enum}
@@ -58,7 +79,12 @@
 	{/if}
 
 	{#if gameState.exposeAnswer && gameState.exposeQuestion}
-		<p id="answer">{gameState.activeQuestion?.answer}</p>
+		<p id="answer">
+			{gameState.activeQuestion?.answer}{isModerator &&
+			gameState.activeQuestion?.type === QuestionType.Estimate
+				? ' (PUNKTE MANUELL VERGEBEN!)'
+				: ''}
+		</p>
 	{/if}
 </div>
 
@@ -114,13 +140,14 @@
 	}
 
 	input[type='text'] {
-		width: 20rem;
+		width: 24rem;
 		padding: 0.75rem 1.25rem;
 		border: 2px solid #67f2d1;
 		border-radius: 0.5rem;
 		font-size: 1.25rem;
 		outline: none;
 		text-align: center;
+		margin-top: 1rem;
 	}
 
 	input[type='text']:hover,
@@ -139,5 +166,9 @@
 		position: absolute;
 		bottom: 0;
 		box-shadow: 0.25rem 0.25rem 0.75rem #555555aa;
+	}
+
+	.double-points {
+		color: #4ed1b5;
 	}
 </style>

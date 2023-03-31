@@ -1,9 +1,14 @@
 <script lang="ts">
-	import { socketInstance } from '$lib/socket';
+	import { socketInstance } from '../lib/socket';
 	import type { Category, Question } from '../lib/types';
-	export let categories: Category[] = [];
+	import { isDoublePoints } from '../lib/util';
+
+	let doublePoints = false;
+
 	export let isModerator: boolean = false;
 	export let showCategories: boolean = false;
+	export let categories: Category[];
+	$: doublePoints = isDoublePoints(categories);
 
 	function openQuestion(categoryName: string, question: Question) {
 		if (isModerator) {
@@ -19,10 +24,11 @@
 			{#each category.questions as question}
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
-					class="question {question.answered ? 'answered' : ''} {isModerator ? 'pointer' : ''}"
+					class="question {question.answered && 'answered'} {isModerator &&
+						'pointer'} {doublePoints && !question.answered && 'double-points'}"
 					on:click={() => openQuestion(category.name, question)}
 				>
-					{question.value}
+					{doublePoints && !question.answered ? question.value * 2 : question.value}
 				</div>
 			{/each}
 		</div>
@@ -65,6 +71,11 @@
 		--lighter-color: hsl(265, 44%, 54%);
 		--darker-color: hsl(265, 38%, 49%);
 		--darker-color-transparency: hsla(265, 38%, 49%, 0.467);
+	}
+	.category:nth-of-type(6) {
+		--lighter-color: hsl(250, 44%, 54%);
+		--darker-color: hsl(250, 38%, 49%);
+		--darker-color-transparency: hsla(250, 38%, 49%, 0.467);
 	}
 
 	.category-title {
@@ -202,6 +213,10 @@
 			);
 		background-size: 20px 35px;
 		background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px;
+	}
+
+	.question.double-points {
+		color: #67f2d1;
 	}
 
 	.pointer {

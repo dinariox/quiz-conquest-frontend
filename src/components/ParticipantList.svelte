@@ -1,14 +1,16 @@
 <script lang="ts">
 	import type { GameState, Participant } from '../lib/types';
 	import { socketInstance } from '../lib/socket';
-	export let gameState: GameState = {} as GameState;
+	export let gameState: GameState;
 	export let isModerator: boolean = false;
 
 	let pointInput = '';
 
 	function removePlayer(playerId: string) {
 		if (isModerator) {
-			socketInstance.socket.emit('removePlayer', playerId);
+			if (confirm('Wirklich entfernen?')) {
+				socketInstance.socket.emit('removePlayer', playerId);
+			}
 		}
 	}
 
@@ -35,6 +37,9 @@
 		>
 			<span class="name">{player.name}</span>
 			<span class="score">{player.score}</span>
+			{#if isModerator || gameState.revealTextInput}
+				<div class="user-text">{player.textInput}</div>
+			{/if}
 			{#if isModerator}
 				<div class="moderator-buttons">
 					<button class="moderator-button" on:click={() => updatePoints(player.id)}>
@@ -61,8 +66,8 @@
 							<path
 								d="M11 5a3 3 0 11-6 0 3 3 0 016 0zM2.046 15.253c-.058.468.172.92.57 1.175A9.953 9.953 0 008 18c1.982 0 3.83-.578 5.384-1.573.398-.254.628-.707.57-1.175a6.001 6.001 0 00-11.908 0zM12.75 7.75a.75.75 0 000 1.5h5.5a.75.75 0 000-1.5h-5.5z"
 							/>
-						</svg></button
-					>
+						</svg>
+					</button>
 				</div>
 			{/if}
 		</div>
@@ -73,6 +78,7 @@
 	.participant-list {
 		display: flex;
 		gap: 0.75rem;
+		margin-bottom: 3rem;
 	}
 
 	.participant {
@@ -140,5 +146,24 @@
 	.moderator-button svg {
 		width: 2rem;
 		height: 2rem;
+	}
+
+	.user-text {
+		position: absolute;
+		left: 0;
+		bottom: -2.5rem;
+		width: 90%;
+		margin-left: 5%;
+		height: 3rem;
+		background-color: white;
+		border-radius: 0.5rem;
+		text-align: center;
+		font-size: 1.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: black;
+		word-break: break-all;
+		line-height: 1.25rem;
 	}
 </style>

@@ -1,11 +1,12 @@
 Ideen/Todo:
 
 - Random generierte Avatare für Teilnehmer
-- Sounds (Buzzer, Richtig beantwortet)
-- Eingabefelder bei Schätzfragen
-- Anzeige von Bildern bei Bilderfragen
-- Einzelnes Aufzählen bei Lineup
-- Einblenden der Antwort
-- Anzeigen des Boards ohne Kategorien vor Spielstart
-- Anzeigen, dass die letzten 5 Fragen doppelte Punkte geben (2x in der Ecke)
+- ✅ Sounds (Buzzer, Richtig beantwortet)
+- ✅ Eingabefelder bei Schätzfragen (Muss dem Moderator und evtl noch allen Teilnehmer angezeigt werden)
+- ✅ Anzeige von Bildern bei Bilderfragen
+- ✅ Einzelnes Aufzählen bei Lineup
+- ✅ Einblenden der Antwort
+- ✅ Anzeigen des Boards ohne Kategorien vor Spielstart
+- ✅ Anzeigen, dass die letzten 5 Fragen doppelte Punkte geben (2x in der Ecke)
 - Goldene Frage (?)
+- ✅ Feuerwerk Gewinner Reveal
