@@ -1,3 +1,3 @@
 export const environment = {
-	BACKEND_URL: 'http://217.160.37.145:3000'
+	BACKEND_URL: 'https://vollsm.art'
 };
