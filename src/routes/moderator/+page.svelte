@@ -20,7 +20,9 @@
 		showBoard: false,
 		enumRevealAmount: 0,
 		lockTextInput: false,
-		revealTextInput: false
+		revealTextInput: false,
+		lockChoice: false,
+		revealChoice: false
 	};
 
 	onMount(() => {
@@ -104,6 +106,14 @@
 		socketInstance.socket.emit('revealTextInput');
 	}
 
+	function lockChoice() {
+		socketInstance.socket.emit('lockChoice');
+	}
+
+	function revealChoice() {
+		socketInstance.socket.emit('revealChoice');
+	}
+
 	function revealWinner() {
 		if (confirm('Wirklich Feuerwerk zünden?')) {
 			socketInstance.socket.emit('launch-fireworks');
@@ -150,19 +160,6 @@
 					/>
 				</svg>
 				<span>Buzzer freigeben</span>
-			</button>
-			<button on:click={() => revealWinner()}>
-				<svg
-					fill="currentColor"
-					viewBox="0 0 20 20"
-					xmlns="http://www.w3.org/2000/svg"
-					aria-hidden="true"
-				>
-					<path
-						d="M13.92 3.845a19.361 19.361 0 01-6.3 1.98C6.765 5.942 5.89 6 5 6a4 4 0 00-.504 7.969 15.974 15.974 0 001.271 3.341c.397.77 1.342 1 2.05.59l.867-.5c.726-.42.94-1.321.588-2.021-.166-.33-.315-.666-.448-1.004 1.8.358 3.511.964 5.096 1.78A17.964 17.964 0 0015 10c0-2.161-.381-4.234-1.08-6.155zM15.243 3.097A19.456 19.456 0 0116.5 10c0 2.431-.445 4.758-1.257 6.904l-.03.077a.75.75 0 001.401.537 20.902 20.902 0 001.312-5.745 1.999 1.999 0 000-3.545 20.902 20.902 0 00-1.312-5.745.75.75 0 00-1.4.537l.029.077z"
-					/>
-				</svg>
-				<span>Gewinner verkünden</span>
 			</button>
 		</div>
 		<div class="group">
@@ -341,6 +338,60 @@
 				<span>Schätzung aufdecken</span>
 			</button>
 		</div>
+		<div class="group">
+			<button
+				on:click={() => lockChoice()}
+				disabled={gameState.activeQuestion?.type !== QuestionType.Choice ||
+					gameState.lockChoice ||
+					!gameState.exposeQuestion}
+			>
+				<svg
+					fill="currentColor"
+					viewBox="0 0 20 20"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-hidden="true"
+				>
+					<path
+						clip-rule="evenodd"
+						fill-rule="evenodd"
+						d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+					/>
+				</svg>
+				<span>Choice sperren</span>
+			</button>
+			<button
+				on:click={() => revealChoice()}
+				disabled={gameState.activeQuestion?.type !== QuestionType.Choice ||
+					gameState.revealChoice ||
+					!gameState.lockChoice ||
+					!gameState.exposeQuestion}
+			>
+				<svg
+					fill="currentColor"
+					viewBox="0 0 20 20"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-hidden="true"
+				>
+					<path
+						d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
+					/>
+				</svg>
+				<span>Choice aufdecken</span>
+			</button>
+			<button on:click={() => revealWinner()}>
+				<svg
+					fill="currentColor"
+					viewBox="0 0 20 20"
+					xmlns="http://www.w3.org/2000/svg"
+					aria-hidden="true"
+				>
+					<path
+						d="M13.92 3.845a19.361 19.361 0 01-6.3 1.98C6.765 5.942 5.89 6 5 6a4 4 0 00-.504 7.969 15.974 15.974 0 001.271 3.341c.397.77 1.342 1 2.05.59l.867-.5c.726-.42.94-1.321.588-2.021-.166-.33-.315-.666-.448-1.004 1.8.358 3.511.964 5.096 1.78A17.964 17.964 0 0015 10c0-2.161-.381-4.234-1.08-6.155zM15.243 3.097A19.456 19.456 0 0116.5 10c0 2.431-.445 4.758-1.257 6.904l-.03.077a.75.75 0 001.401.537 20.902 20.902 0 001.312-5.745 1.999 1.999 0 000-3.545 20.902 20.902 0 00-1.312-5.745.75.75 0 00-1.4.537l.029.077z"
+					/>
+				</svg>
+				<span>Gewinner verkünden</span>
+			</button>
+		</div>
 	</div>
 	<Fireworks />
 </main>
@@ -378,6 +429,8 @@
 		justify-content: space-between;
 		align-items: center;
 		gap: 0.5rem;
+		font-size: 1rem;
+		font-family: inherit;
 	}
 
 	.group button:disabled {

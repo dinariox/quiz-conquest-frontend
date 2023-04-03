@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { GameState, Participant } from '../lib/types';
+	import { QuestionType, type GameState, type Participant } from '../lib/types';
 	import { socketInstance } from '../lib/socket';
+	import { indexToLetter } from '$lib/util';
 	export let gameState: GameState;
 	export let isModerator: boolean = false;
 
@@ -37,8 +38,16 @@
 		>
 			<span class="name">{player.name}</span>
 			<span class="score">{player.score}</span>
-			{#if isModerator || gameState.revealTextInput}
+			{#if (isModerator && gameState.activeQuestion?.type === QuestionType.Estimate) || gameState.revealTextInput}
 				<div class="user-text">{player.textInput}</div>
+			{/if}
+			{#if (isModerator && gameState.activeQuestion?.type === QuestionType.Choice) || gameState.revealChoice}
+				<div class="user-text">
+					{player.choice > -1
+						? gameState.activeQuestion?.choices &&
+						  `${indexToLetter(player.choice)}: ${gameState.activeQuestion.choices[player.choice]}`
+						: ''}
+				</div>
 			{/if}
 			{#if isModerator}
 				<div class="moderator-buttons">

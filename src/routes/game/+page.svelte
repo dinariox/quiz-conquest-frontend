@@ -23,7 +23,9 @@
 		showBoard: false,
 		enumRevealAmount: 0,
 		lockTextInput: false,
-		revealTextInput: false
+		revealTextInput: false,
+		lockChoice: false,
+		revealChoice: false
 	};
 
 	onMount(() => {
