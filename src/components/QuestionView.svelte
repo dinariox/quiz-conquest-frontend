@@ -71,9 +71,10 @@
 		{/if}
 	{/if}
 
-	{#if gameState.activeQuestion?.type === QuestionType.Img && gameState.exposeQuestion}
+	{#if gameState.activeQuestion?.type === QuestionType.Img}
 		<img
 			id="question-image"
+			class={gameState.exposeQuestion ? '' : 'hide'}
 			src={environment.BACKEND_URL + gameState.activeQuestion?.question}
 			alt="Bild zur Frage"
 		/>
@@ -126,6 +127,11 @@
 		color: black;
 		line-height: 2.5rem;
 		margin: 0;
+	}
+
+	.hide {
+		position: absolute;
+		top: -100vh;
 	}
 
 	.only-moderator {

@@ -12,7 +12,7 @@ Ideen/Todo:
 - ✅ Feuerwerk Gewinner Reveal
 - ❌ Schätzfragen automatisch ausrechnen, wer am nächsten dran ist (Nicht viable, da Inputs sehr verschieden sein können)
 - Nach Beantwortung GameState in Datei saven und wiederherstellbar machen
-- Bilder bei Bilderfragen laden und dann erst 1 sek später anzeigen
+- ✅ Bilder bei Bilderfragen werden schon beim Öffnen der Frage geladen, aber noch nicht angezeigt.
 - ✅ Neuer Fragentyp: Multiple Choice (A, B, C, D)
 - ✅ Der Moderator muss die Antwort vorm Aufdecken sehen können
 - ✅ Art der Frage anzeigen
