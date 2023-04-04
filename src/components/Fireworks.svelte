@@ -5,23 +5,25 @@
 	import { onMount } from 'svelte';
 
 	let winner: Participant | null = null;
-
-	let duration = 15 * 1000;
-	let animationEnd = Date.now() + duration;
-	let defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+	let interval: number;
 
 	function randomInRange(min: number, max: number): number {
 		return Math.random() * (max - min) + min;
 	}
 
-	let interval: number;
-
 	function launch() {
-		interval = setInterval(function () {
+		let duration = 15 * 1000;
+		let animationEnd = Date.now() + duration;
+		let defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+		setTimeout(() => {
+			winner = null;
+		}, duration);
+
+		interval = setInterval(() => {
 			let timeLeft = animationEnd - Date.now();
 
 			if (timeLeft <= 0) {
-				winner = null;
 				return clearInterval(interval);
 			}
 
@@ -44,7 +46,7 @@
 
 	onMount(() => {
 		let audio = new Audio('/minecraft-advancement-challenge-complete.mp3');
-		audio.volume = 0.2;
+		audio.volume = 0.15;
 
 		socketInstance.socket.on('launch-fireworks', (player: Participant) => {
 			winner = player;
