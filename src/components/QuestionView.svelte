@@ -94,8 +94,8 @@
 		</div>
 	{/if}
 
-	{#if gameState.exposeAnswer && gameState.exposeQuestion}
-		<p id="answer">
+	{#if (gameState.exposeAnswer || isModerator) && gameState.exposeQuestion}
+		<p id="answer" class={isModerator && !gameState.exposeAnswer ? 'only-moderator' : ''}>
 			{gameState.activeQuestion?.answer}{isModerator &&
 			gameState.activeQuestion?.type === QuestionType.Estimate
 				? ' (PUNKTE MANUELL VERGEBEN!)'
@@ -128,8 +128,8 @@
 		margin: 0;
 	}
 
-	#question.only-moderator {
-		color: #cc5555;
+	.only-moderator {
+		color: #cc5555 !important;
 	}
 
 	.enum-item {

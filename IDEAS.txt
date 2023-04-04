@@ -14,5 +14,5 @@ Ideen/Todo:
 - Nach Beantwortung GameState in Datei saven und wiederherstellbar machen
 - Bilder bei Bilderfragen laden und dann erst 1 sek später anzeigen
 - ✅ Neuer Fragentyp: Multiple Choice (A, B, C, D)
-- Der Moderator muss die Antwort vorm Aufdecken sehen können
+- ✅ Der Moderator muss die Antwort vorm Aufdecken sehen können
 - ✅ Art der Frage anzeigen
