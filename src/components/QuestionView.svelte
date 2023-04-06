@@ -103,6 +103,12 @@
 				: ''}
 		</p>
 	{/if}
+
+	{#if gameState.activeQuestion?.notes && isModerator}
+		<div class="notes">
+			<p><b>Notizen:</b><br />{gameState.activeQuestion.notes}</p>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -222,5 +228,17 @@
 		color: #4ed1b5;
 		margin-right: 0.5rem;
 		font-weight: bold;
+	}
+
+	.notes {
+		color: black;
+		background-color: #4ed1b5;
+		font-size: 1.25rem;
+		padding: 0.5rem 1rem;
+		border-radius: 0.5rem;
+		position: absolute;
+		left: 0;
+		transform: translateX(calc(-100% - 1rem));
+		max-width: 10rem;
 	}
 </style>

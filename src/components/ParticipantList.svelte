@@ -36,6 +36,11 @@
 				? 'turn'
 				: ''}"
 		>
+			<img
+				class="avatar"
+				src="https://api.dicebear.com/6.x/avataaars/svg?seed={btoa(player.name)}"
+				alt="Avatar"
+			/>
 			<span class="name">{player.name}</span>
 			<span class="score">{player.score}</span>
 			{#if (isModerator && gameState.activeQuestion?.type === QuestionType.Estimate) || gameState.revealTextInput}
@@ -91,17 +96,24 @@
 	}
 
 	.participant {
-		width: 14.5rem;
-		height: 4.5rem;
-		padding: 0 1.25rem;
+		width: 14rem;
+		height: 4rem;
+		padding-right: 1.25rem;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: 0.5rem;
-		background: #948b8f;
-		border: 5px solid #857d80;
+		background: #363435;
+		border: 5px solid #1a1919;
 		border-radius: 0.5rem;
 		position: relative;
+	}
+
+	.avatar {
+		height: 100%;
+		padding-top: 0.25rem;
+		padding-left: 0.25rem;
+		box-sizing: border-box;
 	}
 
 	.buzzed {
@@ -113,14 +125,14 @@
 	}
 
 	.name {
-		font-size: 2rem;
+		font-size: 1.75rem;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 
 	.score {
-		font-size: 3rem;
+		font-size: 2.5rem;
 	}
 
 	.moderator-buttons {
