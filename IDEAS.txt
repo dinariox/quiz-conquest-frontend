@@ -1,6 +1,6 @@
 Ideen/Todo:
 
-- Random generierte Avatare für Teilnehmer
+- ✅ Random generierte Avatare für Teilnehmer
 - ✅ Sounds (Buzzer, Richtig beantwortet)
 - ✅ Eingabefelder bei Schätzfragen (Muss dem Moderator und evtl noch allen Teilnehmer angezeigt werden)
 - ✅ Anzeige von Bildern bei Bilderfragen
@@ -8,5 +8,12 @@ Ideen/Todo:
 - ✅ Einblenden der Antwort
 - ✅ Anzeigen des Boards ohne Kategorien vor Spielstart
 - ✅ Anzeigen, dass die letzten 5 Fragen doppelte Punkte geben (2x in der Ecke)
-- Goldene Frage (?)
+- Goldene Frage
 - ✅ Feuerwerk Gewinner Reveal
+- ❌ Schätzfragen automatisch ausrechnen, wer am nächsten dran ist (Nicht viable, da Inputs sehr verschieden sein können)
+- ✅ Nach Beantwortung GameState in Datei saven ❌ und wiederherstellbar machen
+- ✅ Bilder bei Bilderfragen werden schon beim Öffnen der Frage geladen, aber noch nicht angezeigt.
+- ✅ Neuer Fragentyp: Multiple Choice (A, B, C, D)
+- ✅ Der Moderator muss die Antwort vorm Aufdecken sehen können
+- ✅ Art der Frage anzeigen
+- ✅ Dem Moderator die Notizen anzeigen

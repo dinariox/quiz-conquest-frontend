@@ -1,24 +1,25 @@
 <script lang="ts">
-	import type { GameState, Participant } from '../lib/types';
+	import { QuestionType, type GameState, type Participant } from '../lib/types';
 	import { socketInstance } from '../lib/socket';
+	import { indexToLetter } from '$lib/util';
 	export let gameState: GameState;
 	export let isModerator: boolean = false;
 
 	let pointInput = '';
 
-	function removePlayer(playerId: string) {
+	function removePlayer(playerId: string, playerName: string) {
 		if (isModerator) {
-			if (confirm('Wirklich entfernen?')) {
+			if (confirm(`Wirklich ${playerName} entfernen?`)) {
 				socketInstance.socket.emit('removePlayer', playerId);
 			}
 		}
 	}
 
-	function updatePoints(playerId: string) {
+	function updatePoints(playerId: string, playerName: string) {
 		if (isModerator) {
 			let points = null;
 			while (!points) {
-				points = prompt('Wie viele Punkte sollen hinzugefügt werden?');
+				points = prompt(`Wie viele Punkte sollen ${playerName} hinzugefügt werden?`);
 			}
 			const pointDelta = parseInt(points);
 			socketInstance.socket.emit('updatePoints', { playerId, pointDelta });
@@ -35,14 +36,27 @@
 				? 'turn'
 				: ''}"
 		>
+			<img
+				class="avatar"
+				src="https://api.dicebear.com/6.x/avataaars/svg?seed={btoa(player.name)}"
+				alt="Avatar"
+			/>
 			<span class="name">{player.name}</span>
 			<span class="score">{player.score}</span>
-			{#if isModerator || gameState.revealTextInput}
+			{#if (isModerator && gameState.activeQuestion?.type === QuestionType.Estimate) || gameState.revealTextInput}
 				<div class="user-text">{player.textInput}</div>
+			{/if}
+			{#if (isModerator && gameState.activeQuestion?.type === QuestionType.Choice) || gameState.revealChoice}
+				<div class="user-text">
+					{player.choice > -1
+						? gameState.activeQuestion?.choices &&
+						  `${indexToLetter(player.choice)}: ${gameState.activeQuestion.choices[player.choice]}`
+						: ''}
+				</div>
 			{/if}
 			{#if isModerator}
 				<div class="moderator-buttons">
-					<button class="moderator-button" on:click={() => updatePoints(player.id)}>
+					<button class="moderator-button" on:click={() => updatePoints(player.id, player.name)}>
 						<svg
 							fill="currentColor"
 							viewBox="0 0 20 20"
@@ -56,7 +70,7 @@
 							/>
 						</svg>
 					</button>
-					<button class="moderator-button" on:click={() => removePlayer(player.id)}
+					<button class="moderator-button" on:click={() => removePlayer(player.id, player.name)}
 						><svg
 							fill="currentColor"
 							viewBox="0 0 20 20"
@@ -82,17 +96,24 @@
 	}
 
 	.participant {
-		width: 14.5rem;
-		height: 4.5rem;
-		padding: 0 1.25rem;
+		width: 14rem;
+		height: 4rem;
+		padding-right: 1.25rem;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: 0.5rem;
-		background: #948b8f;
-		border: 5px solid #857d80;
+		background: #363435;
+		border: 5px solid #1a1919;
 		border-radius: 0.5rem;
 		position: relative;
+	}
+
+	.avatar {
+		height: 100%;
+		padding-top: 0.25rem;
+		padding-left: 0.25rem;
+		box-sizing: border-box;
 	}
 
 	.buzzed {
@@ -104,14 +125,14 @@
 	}
 
 	.name {
-		font-size: 2rem;
+		font-size: 1.75rem;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 
 	.score {
-		font-size: 3rem;
+		font-size: 2.5rem;
 	}
 
 	.moderator-buttons {

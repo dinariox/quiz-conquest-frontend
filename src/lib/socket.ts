@@ -1,12 +1,12 @@
 import { io, Socket } from 'socket.io-client';
-import { environment } from './environment';
+import { PUBLIC_BACKEND_URL } from '$env/static/public';
 
 class SocketSingleton {
 	private static instance: SocketSingleton;
 	public socket: Socket;
 
 	private constructor() {
-		this.socket = io(environment.BACKEND_URL);
+		this.socket = io(PUBLIC_BACKEND_URL);
 	}
 
 	public static getInstance(): SocketSingleton {

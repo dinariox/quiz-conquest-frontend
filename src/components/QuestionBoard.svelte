@@ -18,14 +18,15 @@
 </script>
 
 <div class="question-board">
-	{#each categories as category}
+	{#each categories as category, cIdx}
 		<div class="category">
 			<div class="category-title">{showCategories ? category.name : '???'}</div>
-			{#each category.questions as question}
+			{#each category.questions as question, qIdx}
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<div
 					class="question {question.answered && 'answered'} {isModerator &&
 						'pointer'} {doublePoints && !question.answered && 'double-points'}"
+					style="animation-delay: {qIdx * 100 + cIdx * 100}ms"
 					on:click={() => openQuestion(category.name, question)}
 				>
 					{doublePoints && !question.answered ? question.value * 2 : question.value}
@@ -107,6 +108,8 @@
 		justify-content: center;
 		border-radius: 0.5rem;
 		border: 5px solid transparent;
+
+		animation: ease-in-out shimmer 2.5s infinite;
 
 		background-color: var(--lighter-color);
 		background-image: linear-gradient(
@@ -221,5 +224,15 @@
 
 	.pointer {
 		cursor: pointer;
+	}
+
+	@keyframes shimmer {
+		0%,
+		100% {
+			filter: brightness(1);
+		}
+		50% {
+			filter: brightness(1.25);
+		}
 	}
 </style>
