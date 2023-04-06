@@ -7,19 +7,19 @@
 
 	let pointInput = '';
 
-	function removePlayer(playerId: string) {
+	function removePlayer(playerId: string, playerName: string) {
 		if (isModerator) {
-			if (confirm('Wirklich entfernen?')) {
+			if (confirm(`Wirklich ${playerName} entfernen?`)) {
 				socketInstance.socket.emit('removePlayer', playerId);
 			}
 		}
 	}
 
-	function updatePoints(playerId: string) {
+	function updatePoints(playerId: string, playerName: string) {
 		if (isModerator) {
 			let points = null;
 			while (!points) {
-				points = prompt('Wie viele Punkte sollen hinzugefügt werden?');
+				points = prompt(`Wie viele Punkte sollen ${playerName} hinzugefügt werden?`);
 			}
 			const pointDelta = parseInt(points);
 			socketInstance.socket.emit('updatePoints', { playerId, pointDelta });
@@ -56,7 +56,7 @@
 			{/if}
 			{#if isModerator}
 				<div class="moderator-buttons">
-					<button class="moderator-button" on:click={() => updatePoints(player.id)}>
+					<button class="moderator-button" on:click={() => updatePoints(player.id, player.name)}>
 						<svg
 							fill="currentColor"
 							viewBox="0 0 20 20"
@@ -70,7 +70,7 @@
 							/>
 						</svg>
 					</button>
-					<button class="moderator-button" on:click={() => removePlayer(player.id)}
+					<button class="moderator-button" on:click={() => removePlayer(player.id, player.name)}
 						><svg
 							fill="currentColor"
 							viewBox="0 0 20 20"

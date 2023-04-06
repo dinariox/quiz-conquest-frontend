@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Category, GameState, Question } from '../lib/types';
 	import { QuestionType } from '../lib/types';
-	import { environment } from '../lib/environment';
 	import { socketInstance } from '$lib/socket';
 	import {
 		isDoublePoints,
@@ -10,6 +9,7 @@
 		extractEnumItems,
 		indexToLetter
 	} from '$lib/util';
+	import { PUBLIC_BACKEND_URL } from '$env/static/public';
 
 	export let gameState: GameState;
 	export let isModerator: boolean = false;
@@ -75,7 +75,7 @@
 		<img
 			id="question-image"
 			class={gameState.exposeQuestion ? '' : 'hide'}
-			src={environment.BACKEND_URL + gameState.activeQuestion?.question}
+			src={PUBLIC_BACKEND_URL + gameState.activeQuestion?.question}
 			alt="Bild zur Frage"
 		/>
 	{/if}
