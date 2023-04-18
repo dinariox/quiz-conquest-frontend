@@ -41,9 +41,16 @@
 		</p>
 	{/if}
 
-	{#if gameState.activeQuestion?.type !== QuestionType.Img && gameState.activeQuestion?.type !== QuestionType.Enum}
+	{#if gameState.activeQuestion && gameState.activeQuestion?.type !== QuestionType.Img && gameState.activeQuestion?.type !== QuestionType.Enum}
 		{#if gameState.exposeQuestion}
-			<p id="question">{gameState.activeQuestion?.question}</p>
+			<p
+				id="question"
+				class={getQuestionCategory(gameState.categories, gameState.activeQuestion)?.name == '🤔🤓'
+					? 'emoji-text'
+					: ''}
+			>
+				{gameState.activeQuestion?.question}
+			</p>
 		{:else if isModerator}
 			<p id="question" class="only-moderator">{gameState.activeQuestion?.question}</p>
 			<p>(NOT EXPOSED)</p>
@@ -95,7 +102,7 @@
 		</div>
 	{/if}
 
-	{#if (gameState.exposeAnswer || isModerator) && gameState.exposeQuestion}
+	{#if (gameState.exposeAnswer && gameState.exposeQuestion) || isModerator}
 		<p id="answer" class={isModerator && !gameState.exposeAnswer ? 'only-moderator' : ''}>
 			{gameState.activeQuestion?.answer}{isModerator &&
 			gameState.activeQuestion?.type === QuestionType.Estimate
@@ -240,5 +247,10 @@
 		left: 0;
 		transform: translateX(calc(-100% - 1rem));
 		max-width: 10rem;
+	}
+
+	.emoji-text {
+		font-size: 4rem !important;
+		padding-top: 2rem;
 	}
 </style>
