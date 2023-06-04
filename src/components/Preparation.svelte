@@ -13,6 +13,16 @@
 	import { QuestionType, type Category, type Question } from '$lib/types';
 	import { translateQuestionType } from '$lib/util';
 	import { PUBLIC_BACKEND_URL } from '$env/static/public';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		window.addEventListener('keydown', (event) => {
+			if (event.ctrlKey && event.key === 's') {
+				event.preventDefault();
+				saveCategories();
+			}
+		});
+	});
 
 	let categories: Category[] = [];
 	$: console.log(categories);
@@ -129,6 +139,14 @@
 	}
 
 	function saveCategories(): void {
+		if (
+			categories.length === 0 &&
+			!confirm(
+				'Es gibt keine Fragen zum Speichern. Wenn du jetzt speicherst, löscht du eventuelle, auf dem Server gespeicherte Fragen. Fortfahren?'
+			)
+		)
+			return;
+
 		const data = JSON.stringify({ categories });
 		fetch(`${PUBLIC_BACKEND_URL}/save-questions`, {
 			method: 'POST',
@@ -171,37 +189,41 @@
 </script>
 
 <div>
-	<button on:click={loadCategories}>
-		<Icon src={CloudArrowDown} size="1rem" />
-		Fragen laden
-	</button>
-	<button on:click={saveCategories}>
-		<Icon src={CloudArrowUp} size="1rem" />
-		Fragen speichern
-	</button>
-	<button on:click={addCategory}>
-		<Icon src={Plus} size="1rem" />
-		Kategorie hinzufügen
-	</button>
+	<div class="flex">
+		<button on:click={loadCategories}>
+			<Icon src={CloudArrowDown} size="1rem" />
+			Fragen laden
+		</button>
+		<button on:click={saveCategories}>
+			<Icon src={CloudArrowUp} size="1rem" />
+			Fragen speichern
+		</button>
+		<button on:click={addCategory}>
+			<Icon src={Plus} size="1rem" />
+			Kategorie hinzufügen
+		</button>
+	</div>
 
 	<div class="categories">
 		{#each categories as category, categoryIndex}
 			<div class="category">
 				<h2>Kategorie "{category.name}"</h2>
 
-				<button on:click={() => changeCategoryName(category)}>
-					<Icon src={PencilSquare} size="1rem" />
-					Kategorie umbenennen
-				</button>
-				<button on:click={() => deleteCategory(categoryIndex)}>
-					<Icon src={Trash} size="1rem" />
-					Kategorie löschen
-				</button>
+				<div class="flex">
+					<button on:click={() => changeCategoryName(category)}>
+						<Icon src={PencilSquare} size="1rem" />
+						Kategorie umbenennen
+					</button>
+					<button on:click={() => deleteCategory(categoryIndex)}>
+						<Icon src={Trash} size="1rem" />
+						Kategorie löschen
+					</button>
 
-				<button on:click={() => addQuestion(category)}>
-					<Icon src={Plus} size="1rem" />
-					Frage hinzufügen
-				</button>
+					<button on:click={() => addQuestion(category)}>
+						<Icon src={Plus} size="1rem" />
+						Frage hinzufügen
+					</button>
+				</div>
 
 				{#each category.questions as question, questionIndex}
 					<div class="question">
@@ -412,5 +434,10 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 0.5rem;
+	}
+
+	.flex {
+		display: flex;
+		gap: 0.5rem;
 	}
 </style>
