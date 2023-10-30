@@ -7,7 +7,8 @@
 		Minus,
 		Trash,
 		CloudArrowDown,
-		CloudArrowUp
+		CloudArrowUp,
+		BarsArrowDown
 	} from 'svelte-hero-icons';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { QuestionType, type Category, type Question } from '$lib/types';
@@ -72,6 +73,23 @@
 		if (!confirm('Frage wirklich löschen?')) return;
 
 		categories[categoryIndex].questions.splice(questionIndex, 1);
+		categories = categories; // trigger refresh of #each
+	}
+
+	function moveCategory(category: Category): void {
+		const newIndex = prompt(`Neue Position (1-${categories.length}):`);
+		if (newIndex === null) return;
+		const newIndexNumber = parseInt(newIndex);
+		if (isNaN(newIndexNumber) || newIndexNumber < 1 || newIndexNumber > categories.length) {
+			alert('Ungültige Position');
+			return;
+		}
+		categories.splice(newIndexNumber - 1, 0, categories.splice(categories.indexOf(category), 1)[0]);
+		categories = categories; // trigger refresh of #each
+	}
+
+	function sortQuestionsInCategory(category: Category): void {
+		category.questions.sort((a, b) => a.value - b.value);
 		categories = categories; // trigger refresh of #each
 	}
 
@@ -207,7 +225,9 @@
 	<div class="categories">
 		{#each categories as category, categoryIndex}
 			<div class="category">
-				<h2>Kategorie "{category.name}"</h2>
+				<h2>
+					{categoryIndex + 1}. Kategorie "{category.name}" - {category.questions.length} Frage(n)
+				</h2>
 
 				<div class="flex">
 					<button on:click={() => changeCategoryName(category)}>
@@ -218,7 +238,14 @@
 						<Icon src={Trash} size="1rem" />
 						Kategorie löschen
 					</button>
-
+					<button on:click={() => moveCategory(category)}>
+						<Icon src={ArrowsRightLeft} size="1rem" />
+						Kategorie verschieben
+					</button>
+					<button on:click={() => sortQuestionsInCategory(category)}>
+						<Icon src={BarsArrowDown} size="1rem" />
+						Nach Punkten sortieren
+					</button>
 					<button on:click={() => addQuestion(category)}>
 						<Icon src={Plus} size="1rem" />
 						Frage hinzufügen
@@ -267,6 +294,7 @@
 										<Icon src={Trash} size="1rem" />
 										Bild entfernen
 									</button>
+									<a href={PUBLIC_BACKEND_URL + question.question} target="_blank">Bild anzeigen</a>
 								{:else}
 									<input
 										type="file"
@@ -359,7 +387,7 @@
 	}
 
 	.category {
-		width: 800px;
+		width: 1000px;
 		border: white 2px solid;
 		border-radius: 1rem;
 		padding: 1rem;
@@ -439,5 +467,9 @@
 	.flex {
 		display: flex;
 		gap: 0.5rem;
+	}
+
+	a {
+		color: #e6ff6e;
 	}
 </style>

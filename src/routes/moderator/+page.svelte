@@ -140,7 +140,9 @@
 
 	<div class="moderator-buttons">
 		<div class="group">
-			<button on:click={() => showBoard()} disabled={gameState.showBoard}>Board einblenden</button>
+			<button on:click={() => showBoard()} disabled={gameState.showBoard}
+				>Kategorien einblenden</button
+			>
 			<button
 				on:click={() => selectRandomPlayersTurn()}
 				disabled={gameState.playersTurn !== null || gameState.players.length === 0}
