@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { QuestionType, type GameState, type Participant } from '../lib/types';
+	import { QuestionType, type GameState } from '../lib/types';
 	import { socketInstance } from '../lib/socket';
-	import { indexToLetter, isDoublePoints } from '$lib/util';
+	import { indexToLetter, isDoublePoints, getTeamColor, sortParticipantsByTeamId } from '$lib/util';
 	export let gameState: GameState;
 	export let isModerator: boolean = false;
 
@@ -28,16 +28,28 @@
 			socketInstance.socket.emit('updatePoints', { playerId, pointDelta });
 		}
 	}
+
+	function setPlayerTeam(playerId: string, playerName: string) {
+		if (isModerator) {
+			// ask for team Id (number)
+			let teamId = null;
+			while (!teamId) {
+				teamId = prompt(`Welchem Team soll ${playerName} hinzugefügt werden?`);
+			}
+			const teamIdInt = parseInt(teamId);
+			socketInstance.socket.emit('setPlayerTeam', { playerId, teamId: teamIdInt });
+		}
+	}
 </script>
 
 <h2>Teilnehmer</h2>
 <div class="participant-list">
-	{#each gameState.players as player}
+	{#each sortParticipantsByTeamId(gameState.players) as player}
 		<div
 			class="participant {gameState.buzzedPlayer?.id === player.id ? 'buzzed' : ''} {gameState
 				.playersTurn?.id === player.id
 				? 'turn'
-				: ''}"
+				: ''} {player.teamId !== undefined ? 'team-' + getTeamColor(player.teamId) : ''}"
 		>
 			<img
 				class="avatar"
@@ -107,6 +119,27 @@
 					</button>
 					<button
 						class="moderator-button"
+						title="Team zuweisen"
+						on:click={() => setPlayerTeam(player.id, player.name)}
+						><svg
+							data-slot="icon"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
+							aria-hidden="true"
+						>
+							<path
+								clip-rule="evenodd"
+								fill-rule="evenodd"
+								d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
+							/>
+							<path
+								d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z"
+							/>
+						</svg>
+					</button>
+					<button
+						class="moderator-button"
 						title="Spieler vom Spiel entfernen"
 						on:click={() => removePlayer(player.id, player.name)}
 						><svg
@@ -143,6 +176,7 @@
 		gap: 0.5rem;
 		background: #363435;
 		border-radius: 0.5rem;
+		border: 3px solid transparent;
 		position: relative;
 	}
 
@@ -225,5 +259,29 @@
 		color: black;
 		word-break: break-all;
 		line-height: 1.25rem;
+	}
+
+	.team-red {
+		border-color: #e74c3c;
+	}
+
+	.team-blue {
+		border-color: #3498db;
+	}
+
+	.team-green {
+		border-color: #2ecc71;
+	}
+
+	.team-yellow {
+		border-color: #f1c40f;
+	}
+
+	.team-purple {
+		border-color: #9b59b6;
+	}
+
+	.team-orange {
+		border-color: #e67e22;
 	}
 </style>
